@@ -1,24 +1,30 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/BangunDatar.php';
+require_once __DIR__ . '/Mahasiswa.php';
 
-/** @var BangunDatar[] $daftar */
-$daftar = [
-    new Lingkaran(7),
-    new Persegi(5),
-    // TODO Langkah 2: tambahkan new Segitiga(3, 4, 5)
-    new Segitiga(3, 4, 5),
-    // TODO Langkah 4: tambahkan new Trapesium(3, 5, 4)
-    new Trapesium(3, 5, 4),
+echo '=== Rekap Nilai ===', PHP_EOL;
+$kelas = [
+    new Mahasiswa('2024001', 'Ani Lestari',  85, 78, 90),
+    new Mahasiswa('2024002', 'Budi Santoso', 60, 55, 62),
+    new Mahasiswa('2024003', 'Citra Wijaya', 92, 88, 95),
 ];
-
-echo '=== Bangun Datar ===', PHP_EOL;
-foreach ($daftar as $b) {
-    echo '  ', $b, PHP_EOL;
+foreach ($kelas as $m) {
+    echo '  ', $m, PHP_EOL;
 }
 
-$total = array_sum(array_map(fn (BangunDatar $b): float => $b->luas(), $daftar));
-printf('%s  Total luas: %.2f%s', PHP_EOL, $total, PHP_EOL);
+echo PHP_EOL, '=== Objek menolak data yang melanggar aturan ===', PHP_EOL;
 
-echo PHP_EOL, 'Periksa: Lingkaran(7) luas = 153,94 ; Persegi(5) luas = 25,00', PHP_EOL;
+try {
+    new Mahasiswa('2024004', 'Salah Nilai', 150, 80, 80);
+    echo '  MASALAH: nilai 150 seharusnya ditolak!', PHP_EOL;
+} catch (InvalidArgumentException $e) {
+    echo '  Ditolak: ', $e->getMessage(), PHP_EOL;
+}
+
+try {
+    new Mahasiswa('', 'NIM Kosong', 80, 80, 80);
+    echo '  MASALAH: NIM kosong seharusnya ditolak!', PHP_EOL;
+} catch (InvalidArgumentException $e) {
+    echo '  Ditolak: ', $e->getMessage(), PHP_EOL;
+}
