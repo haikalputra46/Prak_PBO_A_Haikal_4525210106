@@ -7,7 +7,7 @@
 | **Kelas** | A |
 | **Mata Kuliah** | Pemrograman Berbasis Objek (PBO) |
 | **Pertemuan** | 5 - Polimorfisme |
-| **Tanggal** | 1 Oktober 2026 |
+| **Tanggal** | 01 Oktober 2026 |
 
 ---
 
