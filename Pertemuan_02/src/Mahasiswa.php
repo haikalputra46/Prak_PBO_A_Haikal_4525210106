@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Sesi 2 — enkapsulasi yang menjaga invariant (PHP).
- * Bandingkan baris demi baris dengan java/Mahasiswa.java.
- */
 class Mahasiswa
 {
     public const float BOBOT_TUGAS = 0.30;
@@ -14,12 +10,6 @@ class Mahasiswa
     private const float NILAI_MIN = 0;
     private const float NILAI_MAX = 100;
 
-    /**
-     * Constructor property promotion (PHP 8):
-     * readonly adalah padanan `final` pada atribut Java.
-     *
-     * TODO 1: lengkapi daftar parameter — tentukan mana yang readonly.
-     */
     public function __construct(
         private readonly string $nim,
         private readonly string $nama,

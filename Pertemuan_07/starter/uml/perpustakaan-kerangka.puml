@@ -1,0 +1,99 @@
+@startuml perpustakaan-class
+title Sistem Perpustakaan — Class Diagram (Sesi 7)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+' ─────────────────────────────────────────────────────────────
+' Model domain sistem perpustakaan berdasarkan deskripsi kebutuhan.
+' ─────────────────────────────────────────────────────────────
+
+package model {
+
+  abstract class Koleksi {
+    - nomorInduk : String
+    - judul : String
+    - penulis : String
+    - tahun : int
+    - jumlahEksemplar : int
+    + {abstract} masaPinjamHari() : int
+    + {abstract} bolehDipinjam() : boolean
+    + tersedia() : boolean
+  }
+
+  class Buku {
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  class Majalah {
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  class Skripsi {
+    + masaPinjamHari() : int
+    + bolehDipinjam() : boolean
+  }
+
+  Koleksi <|-- Buku
+  Koleksi <|-- Majalah
+  Koleksi <|-- Skripsi
+
+  class Bab {
+    - nomor : int
+    - judul : String
+  }
+
+  class Anggota {
+    - nomorAnggota : String {readOnly}
+    - nama : String
+    - jenis : JenisKeanggotaan
+    + dendaPerHari() : long
+  }
+
+  class Peminjaman {
+    - tanggalPinjam : LocalDate
+    - tanggalJatuhTempo : LocalDate
+    - tanggalKembali : LocalDate [0..1]
+    + terlambatHari(tanggal : LocalDate) : long
+    + hitungDenda(tanggal : LocalDate) : long
+  }
+
+  enum StatusKoleksi {
+    TERSEDIA
+    DIPINJAM
+    RUSAK
+    HILANG
+  }
+
+  enum JenisKeanggotaan {
+    MAHASISWA
+    DOSEN
+    KEHORMATAN
+    + dendaPerHari() : long
+  }
+
+  Koleksi --> StatusKoleksi
+
+  ' ── RELASI ───────────────────────────────────────────────
+  Buku "1" *-- "0..*" Bab : terdiri dari
+  Anggota "1" -- "0..*" Peminjaman : memiliki riwayat
+  Koleksi "1" -- "0..*" Peminjaman : dicatat untuk
+
+}
+
+package service {
+  class PerpustakaanService {
+    + tambahKoleksi(k : Koleksi) : void
+    + daftarkanAnggota(a : Anggota) : void
+    + pinjam(nomorAnggota : String, nomorInduk : String) : Peminjaman
+    + kembalikan(nomorAnggota : String, nomorInduk : String) : void
+    + cariKoleksi(nomorInduk : String) : Koleksi
+  }
+
+  PerpustakaanService "1" o-- "0..*" model.Koleksi : mengelola
+  PerpustakaanService "1" o-- "0..*" model.Anggota : mengelola
+}
+
+@enduml

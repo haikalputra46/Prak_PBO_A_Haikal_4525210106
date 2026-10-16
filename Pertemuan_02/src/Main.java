@@ -7,9 +7,9 @@ public class Main {
 
         System.out.println("=== Rekap Nilai ===");
         Mahasiswa[] kelas = {
-            new Mahasiswa("2024001", "Ani Lestari",  85, 78, 90),
-            new Mahasiswa("2024002", "Budi Santoso", 60, 55, 62),
-            new Mahasiswa("2024003", "Citra Wijaya", 92, 88, 95)
+                new Mahasiswa("2024001", "Ani Lestari", 85, 78, 90),
+                new Mahasiswa("2024002", "Budi Santoso", 60, 55, 62),
+                new Mahasiswa("2024003", "Citra Wijaya", 92, 88, 95)
         };
         for (Mahasiswa m : kelas) {
             System.out.println("  " + m);
