@@ -7,9 +7,9 @@ import java.util.List;
  * Sesi 7 — KOMPOSISI.
  *
  * Tiga hal yang membuat sebuah relasi benar-benar komposisi:
- *   1. tidak ada constructor atau method yang MENERIMA objek bagian dari luar
- *   2. objek bagian dibuat DI DALAM induk
- *   3. getter mengembalikan salinan yang tidak bisa diubah
+ * 1. tidak ada constructor atau method yang MENERIMA objek bagian dari luar
+ * 2. objek bagian dibuat DI DALAM induk
+ * 3. getter mengembalikan salinan yang tidak bisa diubah
  *
  * Buku membuat dan mengelola seluruh Bab yang dimilikinya.
  */
@@ -32,7 +32,7 @@ public class Buku {
     }
 
     /**
-    * Bab dibuat di dalam Buku, bukan diterima sebagai objek dari luar.
+     * Bab dibuat di dalam Buku, bukan diterima sebagai objek dari luar.
      */
     public void tambahBab(int nomor, String judulBab) {
         if (nomor <= 0) {
@@ -45,13 +45,15 @@ public class Buku {
     }
 
     /**
-    * Mengembalikan daftar immutable agar pemanggil tidak dapat mengubah bagian.
+     * Mengembalikan daftar immutable agar pemanggil tidak dapat mengubah bagian.
      */
     public List<Bab> getBab() {
         return List.copyOf(bab);
     }
 
-    public boolean tersedia() { return jumlahEksemplar > 0; }
+    public boolean tersedia() {
+        return jumlahEksemplar > 0;
+    }
 
     /** Mengurangi stok satu eksemplar jika tersedia. */
     public void kurangiStok() {
@@ -61,11 +63,21 @@ public class Buku {
         jumlahEksemplar--;
     }
 
-    public void tambahStok() { jumlahEksemplar++; }
+    public void tambahStok() {
+        jumlahEksemplar++;
+    }
 
-    public String getNomorInduk()  { return nomorInduk; }
-    public String getJudul()       { return judul; }
-    public int getJumlahEksemplar() { return jumlahEksemplar; }
+    public String getNomorInduk() {
+        return nomorInduk;
+    }
+
+    public String getJudul() {
+        return judul;
+    }
+
+    public int getJumlahEksemplar() {
+        return jumlahEksemplar;
+    }
 
     @Override
     public String toString() {
@@ -86,9 +98,17 @@ public class Buku {
             this.judul = judul;
         }
 
-        public int getNomor()    { return nomor; }
-        public String getJudul() { return judul; }
+        public int getNomor() {
+            return nomor;
+        }
 
-        @Override public String toString() { return "Bab " + nomor + ": " + judul; }
+        public String getJudul() {
+            return judul;
+        }
+
+        @Override
+        public String toString() {
+            return "Bab " + nomor + ": " + judul;
+        }
     }
 }
