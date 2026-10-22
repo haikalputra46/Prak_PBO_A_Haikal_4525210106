@@ -1,4 +1,4 @@
-| Informasi Praktikan | Keterangan |
+| Informasi Praktikan | Keterangan | 
 | :--- | :--- |
 | **Nama** | Haikal Putra Pratama |
 | **NPM** | 4525210106 |
