@@ -1,0 +1,10 @@
+{
+    "name": "perpustakaan/project",
+    "description": "php",
+    "autoload": {
+        "psr-4": {
+            "Perpustakaan\\": "src/"
+        }
+    },
+    "require": {}
+}
