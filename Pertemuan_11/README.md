@@ -1,167 +1,125 @@
-# Praktikum Sesi 10 — Exception Handling dan Pemrograman Defensif
+# LAPORAN PRAKTIKUM PEMROGRAMAN BERBASIS OBJEK
 
-**Sub-CPMK-P7 — Mahasiswa mampu menerapkan exception handling dan menulis unit test dasar. (P3) — bagian exception.**
-
-**Keterkaitan teori:** Pertemuan 10 — Exception Handling dan Pemrograman Defensif  
-**Durasi:** 170 menit (1 SKS praktikum) · **Bobot:** 5% dari nilai praktikum  
-**Bahasa:** Java 25 dan PHP 8.4+
-
-> Versi cetak modul ini: [`Modul-Praktikum-10-exception-handling-dan-pemrograman-defensif.docx`](Modul-Praktikum-10-exception-handling-dan-pemrograman-defensif.docx). Kerangka kode: [`starter/`](starter/).
-
----
-
-## A. Tujuan sesi
-
-1. Membuat hierarki custom exception yang membawa data, bukan hanya pesan.
-2. Mengganti percabangan bersarang dengan guard clause.
-3. Membuat program tetap berjalan wajar untuk seluruh masukan pengguna yang salah.
-4. Menyusun daftar skenario kegagalan sebagai dasar pengujian pada sesi 11.
-
-## B. Alat dan bahan
-
-- Proyek Maven dan Composer hasil sesi 9.
-
-## C. Berkas starter
-
-Salin ke folder tugas Anda; **jangan** menyunting berkas aslinya. Setiap komentar `TODO` harus Anda lengkapi sendiri — kode yang disalin dari sumber lain akan terlihat pada sesi demo.
-
-| Berkas | Keterangan |
-|---|---|
-| `starter/java/exception/` | Kerangka PerpustakaanException dan empat turunannya, dengan TODO. |
-| `starter/java/LibraryServiceKotor.java` | Versi dengan if bersarang empat tingkat — harus Anda refaktor. |
-| `starter/php/exceptions.php` | Kerangka exception PHP dengan TODO. |
-| `starter/php/LibraryServiceKotor.php` | Padanan PHP yang harus direfaktor. |
-| `starter/skenario-uji.md` | Tabel kosong yang harus Anda isi dengan minimal 10 skenario. |
-
-## D. Langkah kerja
-
-Kerjakan berurutan. Jangan melanjutkan ke langkah berikutnya sebelum checkpoint terpenuhi.
-
-### Langkah 1 — Membangun hierarki exception
-
-- Salin starter exception/ ke proyek Maven Anda, pada package id.ac.univpancasila.perpustakaan.exception.
-- Lengkapi PerpustakaanException sebagai induk abstrak, lalu empat turunannya:
-  • BukuTidakDitemukanException — membawa isbn
-  • AnggotaTidakDitemukanException — membawa idAnggota
-  • BukuSedangDipinjamException — membawa isbn dan judul
-  • BatasPinjamTerlampauiException — membawa idAnggota dan batas
-- Setiap exception WAJIB menyimpan datanya sebagai atribut, bukan hanya menyusun pesan teks. Ini yang membedakannya dari exception biasa dan yang akan dipakai pada sesi 13–14.
-
-> **Checkpoint —** Setiap kelas exception punya minimal satu getter yang mengembalikan data penyebab kegagalan.
-
-### Langkah 2 — Merefaktor if bersarang menjadi guard clause
-
-- Buka LibraryServiceKotor. Method pinjam() di dalamnya bersarang empat tingkat.
-- Refaktor menjadi guard clause: periksa yang salah lebih dulu dan lempar exception, sehingga logika utama tetap rata di kiri.
-- Simpan hasilnya sebagai LibraryService (nama tanpa "Kotor"). JANGAN hapus berkas aslinya — keduanya dipakai saat demo.
-
-> **Checkpoint —** Method pinjam() versi baru tidak punya blok if yang bersarang lebih dari satu tingkat.
-
-### Langkah 3 — Menangani masukan pengguna yang salah
-
-- Tambahkan antarmuka konsol sederhana yang meminta ISBN dan ID anggota dari pengguna.
-- Program harus tetap berjalan wajar untuk: huruf saat diminta angka, masukan kosong, ISBN yang tidak ada, ID anggota yang tidak terdaftar, dan angka negatif.
-- Program TIDAK BOLEH berhenti karena stack trace. Setiap kegagalan harus menghasilkan pesan yang bisa dibaca pengguna.
-
-**Terminal**
-
-```bash
-mvn clean compile
-mvn exec:java -Dexec.mainClass=id.ac.univpancasila.perpustakaan.App
-```
-
-> **Checkpoint —** Anda dapat mengetik masukan sembarang selama satu menit tanpa program berhenti mendadak.
-
-### Langkah 4 — Menangkap seluruh kegagalan domain dengan satu catch
-
-- Di App, tambahkan satu blok catch (PerpustakaanException e) yang menangani seluruh kegagalan domain sekaligus.
-- Di dalamnya, gunakan pemeriksaan tipe untuk mengambil data spesifik dari exception tertentu — misalnya isbn dari BukuTidakDitemukanException.
-- Inilah pola yang akan Anda temukan lagi pada sesi 13 (Laravel) dan sesi 14 (Spring) ketika exception diubah menjadi respons HTTP.
-
-> **Checkpoint —** Satu blok catch menangani empat jenis kegagalan berbeda dengan pesan yang tetap spesifik.
-
-### Langkah 5 — try-with-resources dan padanannya di PHP
-
-- Tambahkan fitur ekspor daftar buku ke berkas teks.
-- Di Java, gunakan try-with-resources sehingga berkas tertutup otomatis meski terjadi exception.
-- Di PHP, tulis penutupan berkas secara manual di blok finally — PHP tidak punya try-with-resources.
-- Buktikan: lempar exception di tengah penulisan, lalu pastikan berkas tetap tertutup.
-
-> **Checkpoint —** Berkas tetap tertutup meskipun exception terjadi di tengah proses penulisan.
-
-### Langkah 6 — Menyusun daftar skenario kegagalan
-
-- Lengkapi sesi-10/skenario-uji.md dengan MINIMAL 10 skenario. Untuk setiap skenario tuliskan: masukan, kegagalan yang diharapkan, jenis exception, dan pesan yang ditampilkan.
-- Daftar ini menjadi bahan langsung untuk unit test pada sesi 11. Susun dengan serius — Anda sendiri yang akan memakainya pekan depan.
-
-> **Checkpoint —** skenario-uji.md memuat 10 baris lengkap, dan setiap skenario benar-benar sudah Anda coba jalankan.
-
-## E. Latihan mandiri di lab
-
-_Dikerjakan bila langkah kerja selesai lebih awal. Tidak wajib, tetapi menambah nilai pada aspek penerapan konsep._
-
-1. Ubah BukuTidakDitemukanException dari unchecked menjadi checked exception. Catat berapa berkas yang harus ikut disunting. Diskusikan: sepadankah?
-2. Buat satu blok catch kosong dengan sengaja, lalu jalankan skenario yang gagal. Amati bahwa kegagalannya hilang tanpa jejak. Kembalikan, dan tuliskan pengalaman itu di skenario-uji.md.
-
-## F. Tugas rumah
-
-1. TUGAS 3 (mata kuliah teori) dikerjakan bersama sesi ini: penanganan kesalahan lengkap pada Sistem Perpustakaan.
-2. Tambahkan pencatatan (logging) sederhana: setiap exception yang tertangkap dicatat ke berkas log dengan waktu, jenis, dan data penyebabnya.
-
-## G. Luaran yang dikumpulkan
-
-Seluruh luaran diserahkan melalui repositori Git pribadi Anda, dengan riwayat commit yang menunjukkan proses pengerjaan — bukan satu commit tunggal di akhir.
-
-| Berkas / folder | Keterangan |
-|---|---|
-| `src/.../exception/` | Empat custom exception yang membawa data, di kedua proyek. |
-| `LibraryServiceKotor dan LibraryService` | Versi sebelum dan sesudah refactoring guard clause. |
-| `sesi-10/skenario-uji.md` | Minimal 10 skenario kegagalan yang sudah diuji. |
-| `Berkas log` | Bukti pencatatan exception. |
-
-## H. Rubrik penilaian sesi ini
-
-| Aspek | Bobot | Kriteria |
-|---|---|---|
-| Kebenaran fungsional | 35% | Seluruh perintah pada langkah kerja berjalan dan menghasilkan keluaran yang diminta. |
-| Penerapan konsep sesi ini | 30% | Konsep yang menjadi Sub-CPMK sesi ini diterapkan dengan tepat, bukan sekadar membuat program berjalan. |
-| Keterbacaan dan konvensi | 10% | Penamaan bermakna, format konsisten, komentar seperlunya, riwayat commit wajar. |
-| Demo dan pertanyaan lisan | 25% | Mampu menjelaskan setiap baris kode sendiri dan menjawab pertanyaan demo. MENGGUGURKAN: tanpa demo, tugas tidak dinilai. |
-
-## I. Pertanyaan demo
-
-> Pertanyaan berikut akan diajukan saat Anda mendemokan pekerjaan sesi ini. Daftar ini sengaja dibuka agar Anda mempersiapkan **pemahaman**, bukan hafalan. Anda boleh memakai alat bantu apa pun saat mengerjakan — tetapi kode yang tidak dapat Anda jelaskan sendiri tidak dinilai.
-
-1. Tunjukkan satu exception Anda. Data apa yang ia bawa selain pesan teks? Untuk apa data itu nanti?
-2. Bandingkan LibraryServiceKotor dan LibraryService. Berapa tingkat kedalaman if pada masing-masing?
-3. Saya ketik huruf saat program meminta angka. Tunjukkan apa yang terjadi, lalu tunjuk baris yang menanganinya.
-4. Mengapa Anda memilih membuat exception ini unchecked dan bukan checked?
-5. Pada blok catch (PerpustakaanException e), bagaimana Anda tetap bisa mengambil isbn yang spesifik?
-6. Saya lempar exception di tengah penulisan berkas. Apakah berkasnya tertutup? Buktikan.
-7. Apa yang salah dengan menulis catch (Exception e) { } kosong? Apa yang terjadi pada sistem yang memakainya?
-
-## J. Kesalahan yang sering terjadi
-
-| Gejala | Penyebab yang lazim | Cara memperbaiki |
-|---|---|---|
-| Exception dibuat tetapi tidak menyimpan data | Hanya memanggil super(pesan) tanpa atribut. | Tambahkan atribut privat dan getter. Pesan teks tidak bisa diurai kembali menjadi data. |
-| Program berhenti dengan stack trace saat masukan salah | Exception dari pembacaan masukan belum ditangani. | Bungkus pembacaan masukan dengan try-catch, dan minta masukan ulang alih-alih menghentikan program. |
-| catch (Exception e) menangkap terlalu banyak | Blok catch terlalu umum sehingga menelan kesalahan pemrograman. | Tangkap tipe yang spesifik. Jika perlu penanganan umum, taruh di lapisan paling luar saja. |
-| Guard clause tetap bersarang | Refactoring dilakukan setengah jalan. | Setiap pemeriksaan harus diakhiri throw atau return, sehingga tidak perlu else. |
-| PHP: exception tidak tertangkap padahal sudah ada catch | Menangkap Exception padahal yang dilempar turunan Error (mis. TypeError). | Di PHP, Error dan Exception bersaudara di bawah Throwable. Tangkap Throwable bila memang perlu keduanya. |
-
-## Lembar verifikasi demo
-
-Diisi oleh dosen atau asisten pada saat demo. Tugas tanpa lembar terverifikasi tidak dinilai.
-
-|  |  |
-|---|---|
-| Nama / NIM |  |
-| Tanggal demo |  |
-| Nilai sesi ini |  |
-| Catatan penguji |  |
-| Paraf penguji |  |
+| Informasi Praktikan | Keterangan |
+| :--- | :--- |
+| **Nama** | Haikal Putra Pratama |
+| **NPM** | 4525210106 |
+| **Kelas** | A |
+| **Mata Kuliah** | Pemrograman Berbasis Objek (PBO) |
+| **Pertemuan** | 11 - Collections, Generics, dan Operasi Fungsional |
+| **Tanggal** | 12 November 2026 |
 
 ---
 
-_Modul ini disusun 10 September 2026. Versi teknologi yang dirujuk (Java 25 LTS, PHP 8.4/8.5, Laravel 13, Spring Boot 4.1) diverifikasi pada tanggal tersebut dan perlu diperiksa ulang sebelum semester berjalan._
+## 1. Implementasi Java
+
+### 1.1. File: `Buku.java`
+**Penjelasan Kode:**
+> Model buku dengan atribut nomor induk, judul, penulis, dan jumlah eksemplar. Memiliki inner class Bab (komposisi: Bab hanya bisa dibuat lewat tambahBab, konstruktornya private). getBab() mengembalikan salinan tak-berubah (List.copyOf). Ada validasi stok negatif dan kurangiStok() yang melempar IllegalStateException bila stok 0.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1756" height="3864" alt="buku java" src="https://github.com/user-attachments/assets/502743b8-00b3-48ec-b668-ec50592490b6" />
+
+### 1.2. File: `Repository.java`
+**Penjelasan Kode:**
+> Kelas generik Repository<T> berbasis LinkedHashMap, dengan Function<T, String> untuk mengambil kunci. Menyediakan simpan, cariById (mengembalikan Optional, bukan null), cariSemua (salinan tak-berubah), hapus, dan jumlah. Menunjukkan konsep generics dan enkapsulasi koleksi.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1540" height="2762" alt="repository java" src="https://github.com/user-attachments/assets/3c42a19e-7142-4ff0-b089-b8969edf6ccb" />
+
+### 1.3. File: `LibraryService.java`
+**Penjelasan Kode:**
+> Logika bisnis inti: tambah buku (stok ditambah bila ISBN sudah ada), daftar anggota, peminjaman dengan empat validasi (anggota tidak ada, buku tidak ada, stok habis, batas 3 pinjaman) yang masing-masing melempar exception domain. Juga ada laporan fungsional memakai Stream API: filter buku tersedia, joining judul, dan groupingBy + counting per penulis.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1878" height="4624" alt="libraryservice java" src="https://github.com/user-attachments/assets/a6999dc4-5fa2-48e5-a974-863a6c5de448" />
+
+### 1.4. File: `Main.java`
+**Penjelasan Kode:**
+> Titik masuk program: menu interaktif (1–4, 0 keluar), lalu mengekspor laporan buku ke laporan_buku.txt dengan try-with-resources. Catatan: pesan default menu menyebut “0 - 3” padahal menu sampai 4.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="2110" height="3674" alt="main java" src="https://github.com/user-attachments/assets/b2788d2e-84b7-4718-8162-023bd6b2862f" />
+
+### 1.5. File: `PerpustakaanService.java`
+**Penjelasan Kode:**
+> Lapisan antarmuka konsol (input/output) untuk tambah anggota, tambah buku, pinjam buku, dan laporan. Menangani NumberFormatException dan exception domain dengan instanceof pattern matching. Catatan: pada pinjamBuku, ID kosong hanya memberi peringatan tanpa continue, sehingga proses tetap berlanjut.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="2064" height="5346" alt="perpustakaanservice java" src="https://github.com/user-attachments/assets/dbf3665b-f2ff-4d13-a06a-ce202ebcf50e" />
+
+### 1.6. File: `pom.xml`
+<img width="1526" height="3180" alt="pom xml" src="https://github.com/user-attachments/assets/b4ad1c4c-5342-4bbe-8322-18e4e52c202c" />
+
+### Output
+**Output Program:**<br>
+<img width="374" height="393" alt="image" src="https://github.com/user-attachments/assets/803df97f-df2a-4774-a8e2-9f0f9ed106be" />
+<img width="354" height="311" alt="image" src="https://github.com/user-attachments/assets/1f2d6820-737c-4041-afb8-3e34342a8b45" />
+<img width="341" height="286" alt="image" src="https://github.com/user-attachments/assets/cd0c7dd5-5c53-44bd-8fd5-d148c77be4af" />
+<img width="419" height="284" alt="image" src="https://github.com/user-attachments/assets/b587a1eb-5949-4b46-9786-ff11059c5882" />
+
+---
+
+## 2. Implementasi PHP
+
+### 2.1. File: `Buku.php`
+**Penjelasan Kode:**
+> Padanan Buku.java. Kelas Bab dan Buku dalam satu file, memakai constructor promotion dan readonly. Karena PHP tidak punya nested class, Bab publik dan disiplin komposisi hanya lewat konvensi. Validasi memakai InvalidArgumentException dan UnderflowException.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1756" height="3978" alt="buku php" src="https://github.com/user-attachments/assets/230c3c27-c888-48fc-ac7b-46612d46793c" />
+
+### 2.2. File: `LibraryService.php`
+**Penjelasan Kode:**
+> Padanan LibraryService.java dengan logika sama (empat validasi pinjam, batas 3, tambah stok). Operasi fungsional memakai method KoleksiBuku. pinjam bertipe void (Java mengembalikan boolean).
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1894" height="5270" alt="libraryservice php" src="https://github.com/user-attachments/assets/366603d6-880d-494d-b3e0-389a070bfeb1" />
+
+### 2.3. File: `PerpustakaanService.php`
+**Penjelasan Kode:**
+> Berisi daftar koleksi sederhana, pinjam/kembalikan yang hanya echo, serta tampilkanLaporanFungsional.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1648" height="3180" alt="perpustakaanservice php" src="https://github.com/user-attachments/assets/04342428-7bb7-47cd-a489-1081dae7a27b" />
+
+### 2.4. File: `KoleksiBuku.php`
+**Penjelasan Kode:**
+> Padanan Repository<T>, tetapi khusus Buku (tidak generik). Mengimplementasikan Countable dan menyediakan filter, map, kelompokkan, dan jumlahkan berbasis callable, sehingga gaya fungsionalnya setara Stream di Java. Mengembalikan null saat tidak ditemukan.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1172" height="3256" alt="koleksibuku php" src="https://github.com/user-attachments/assets/32060d08-5440-43e7-825b-e074a80e4f4f" />
+
+### 2.5. File: `KoleksiBukuTest.php`
+**Penjelasan Kode:**
+> Unit test PHP untuk KoleksiBuku: simpan/cari, null saat tidak ada, koleksi kosong, filter, jumlahkan, timpa ISBN sama, map, kelompokkan, dan dua tes exception (buku/anggota tidak ditemukan). Total 10 tes, memenuhi syarat minimal lima skenario. Tidak ada padanan di sisi Java
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="1862" height="5536" alt="koleksibukutest php" src="https://github.com/user-attachments/assets/1c584af9-11d5-45fe-bf4d-b562716a810a" />
+
+### 2.6. File: `Main.php`
+**Penjelasan Kode:**
+> Skrip demo non-interaktif: menjalankan daftar skenario peminjaman (berhasil/gagal) lewat array, menampilkan laporan, lalu mengekspor laporan_buku.txt dengan try/catch/finally untuk menutup file.
+
+**Bukti Eksekusi (Screenshot):**
+* **After** *(Kondisi akhir / Eksekusi berhasil)*:
+<img width="2064" height="3636" alt="main php" src="https://github.com/user-attachments/assets/4e94ba1d-e6dc-47f2-96d7-73ac06f4e5f4" />
+
+### Output
+**Output Program:**<br>
+<img width="669" height="420" alt="Screenshot 2026-11-14 113516" src="https://github.com/user-attachments/assets/36b620e3-8e88-470a-bddf-76f9e1d8b4a6" />
+
+---
+
+## 3. Kesimpulan
+> Keduanya mengimplementasikan sistem perpustakaan yang sama: model Buku dengan komposisi Bab, lapisan repository, LibraryService dengan aturan peminjaman dan exception domain, laporan fungsional, dan ekspor laporan ke file. Arsitekturnya berlapis (model, repository, service, main) dengan pemisahan tanggung jawab yang jelas.
