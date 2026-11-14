@@ -1,0 +1,18 @@
+{
+    "name": "perpustakaan/project",
+    "description": "Sistem manajemen perpustakaan untuk praktikum PHP",
+    "autoload": {
+        "psr-4": {
+            "Perpustakaan\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Perpustakaan\\Tests\\": "tests/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^13.4"
+    }
+}
